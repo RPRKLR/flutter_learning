@@ -6,6 +6,8 @@ import './utils/colors.dart';
 import './responsive/responsive_layout_screen.dart';
 import './responsive/mobile_screen_layout.dart';
 import './responsive/web_screen_layout.dart';
+import './screens/login_screen.dart';
+import './screens/signup_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,10 +37,11 @@ class MyApp extends StatelessWidget {
       title: 'Instagram clone',
       theme: ThemeData.dark()
           .copyWith(scaffoldBackgroundColor: mobileBackgroundColor),
-      home: const ResponsiveLayout(
-        mobileScreenLayout: MobileScreenLayout(),
-        webScreenLayout: WebScreenLayout(),
-      ),
+      // home: const ResponsiveLayout(
+      //   mobileScreenLayout: MobileScreenLayout(),
+      //   webScreenLayout: WebScreenLayout(),
+      // ),
+      home: SignupScreen(),
     );
   }
 }
