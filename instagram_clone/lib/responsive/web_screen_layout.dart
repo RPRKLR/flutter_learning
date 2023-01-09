@@ -6,7 +6,7 @@ class WebScreenLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text("This is web"),
+      body: Center(child: Text("This is web")),
     );
   }
 }
