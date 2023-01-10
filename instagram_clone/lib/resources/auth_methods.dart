@@ -8,6 +8,16 @@ import '../models/user.dart' as model;
 class AuthMethods {
   final FirebaseAuth auth_ = FirebaseAuth.instance;
   final FirebaseFirestore firestore_ = FirebaseFirestore.instance;
+
+  Future<model.User> getUserDetails() async {
+    User currentUser = auth_.currentUser!;
+
+    DocumentSnapshot snap =
+        await firestore_.collection('users').doc(currentUser.uid).get();
+
+    return model.User.fromSnap(snap);
+  }
+
   // sign up user
   Future<String> signUpUser({
     required String email,
