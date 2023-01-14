@@ -4,8 +4,33 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:tiktok_clone/constants.dart';
+import '../models/user.dart' as model;
+
+import 'package:image_picker/image_picker.dart';
 
 class AuthController extends GetxController {
+  static AuthController instance = Get.find();
+
+  late Rx<File?> _pickedImage;
+
+  File? get getProfilePgoto => _pickedImage.value;
+
+  void pickImage() async {
+    final pickedImage =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      Get.snackbar(
+        'Profile Picture',
+        'You have succefully selected your profile picture',
+      );
+      _pickedImage = Rx<File?>(
+        File(
+          pickedImage.path,
+        ),
+      );
+    }
+  }
+
   // Upload to firebase Storage
   Future<String> _uploadToStorage(File image) async {
     Reference ref = firebaseStorage
@@ -32,12 +57,42 @@ class AuthController extends GetxController {
           password: password,
         );
         String downloadUrl = await _uploadToStorage(image);
+        model.User user = model.User(
+          name: username,
+          email: email,
+          profilePhoto: downloadUrl,
+          uid: cred.user!.uid,
+        );
+        await firestore
+            .collection('users')
+            .doc(cred.user!.uid)
+            .set(user.toJson());
+      } else {
+        Get.snackbar(
+          'Something went wrong',
+          'Please enter all the fields',
+        );
       }
     } catch (err) {
       Get.snackbar(
         'Something went wrong',
         err.toString(),
       );
+    }
+  }
+
+  void loginUser(String email, String password) async {
+    try {
+      if (email.isNotEmpty && email.isNotEmpty) {
+        await firebaseAuth.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+      } else {
+        Get.snackbar('Error Logging in', 'Please enter all the fields');
+      }
+    } catch (e) {
+      Get.snackbar('Something went wrong', e.toString());
     }
   }
 }

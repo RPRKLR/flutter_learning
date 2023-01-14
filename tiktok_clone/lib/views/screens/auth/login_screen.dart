@@ -24,7 +24,7 @@ class LoginScreen extends StatelessWidget {
                 fontWeight: FontWeight.w900,
               ),
             ),
-            Text(
+            const Text(
               'Login',
               style: TextStyle(
                 fontSize: 25,
@@ -53,6 +53,7 @@ class LoginScreen extends StatelessWidget {
                 controller: _passwordController,
                 icon: Icons.lock,
                 labelText: 'Password',
+                isObscure: true,
               ),
             ),
             const SizedBox(
@@ -68,7 +69,10 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               child: InkWell(
-                onTap: () {},
+                onTap: () => authController.loginUser(
+                  _emailController.text,
+                  _passwordController.text,
+                ),
                 child: const Center(
                   child: Text(
                     'LogIn',
